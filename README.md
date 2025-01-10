@@ -1,4 +1,6 @@
-WIP Stage: Planning the Syntax.
+WIP Stage: Coding more syntax
+
+The first syntax!!
 
 This project is work in progress! The expected release date is Feburary/March.
 
