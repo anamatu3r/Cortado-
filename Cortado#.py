@@ -1,7 +1,7 @@
 from time import sleep
 
 print('Cortado# --- 1.0 RELEASE')
-print('Copyright (c) Eyad Taha')
+print('Copyright (c) 2024-2025 Eyad Taha')
 print('')
 
 # BPOS
@@ -38,7 +38,7 @@ class lexer:
         global opcode, parserCache, parserCache_STRING, instructionProcessing_i, parser_i, startFlag, endFlag, dataType
         if parserCache_STRING == 'flash':
             opcode = 'flash'
-        elif parserCache_STRING == '.RAM':
+        elif parserCache_STRING == '.RML':
             opcode = 'ram'
         elif parserCache_STRING == 'delay':
             opcode = 'delay'
@@ -57,8 +57,22 @@ class lexer:
         elif parserCache_STRING == '.ALU.div':
             opcode = 'div'
 
-        elif parserCache_STRING == 'branch.if_lastOperZero':
+        elif parserCache_STRING == 'branch.if_ac.ZERO':
             opcode = 'bIZ'
+
+        elif parserCache_STRING == 'branch.if_ac':
+            opcode = 'bI'
+
+        elif parserCache_STRING == 'branch.eq.if':
+            opcode = 'branchIF'
+
+        elif parserCache_STRING == 'newline':
+            opcode = 'nl'
+
+        elif parserCache_STRING == 'convert.Int':
+            opcode = 'convertInt'
+
+
 
     # Delimiters
     @staticmethod
@@ -242,9 +256,67 @@ def executer():
             final_INT = int(''.join(integerCache))
             instructionProcessing_i = final_INT - 1
 
+    elif opcode == 'bI':
+
+        integerCache_DCS.remove('^')
+        final_INT_DCS = int(''.join(integerCache_DCS))
+
+        if dataType == 'int':
+            integerCache.remove('^')
+            final_INT = int(''.join(integerCache))
+
+            if RAM_ADR_VAL[65] == final_INT:
+                instructionProcessing_i = final_INT_DCS - 1
+
+        elif dataType == 'rml':
+            rmlCache.remove('|')
+            final_RML = int(''.join(rmlCache))
+
+            if RAM_ADR_VAL[65] == final_RML:
+                instructionProcessing_i = final_INT_DCS - 1
+
+        elif dataType == 'str':
+            stringCache.remove('|')
+            final_STR = int(''.join(stringCache))
+
+            if RAM_ADR_VAL[65] == final_STR:
+                instructionProcessing_i = final_INT_DCS - 1
+
+    elif opcode == 'nl':
+        print('')
 
 
-# Parser
+    elif opcode == 'convertInt':
+        rmlCache.remove('|')
+        final_RML = int(''.join(rmlCache))
+        RAM_ADR_VAL[final_RML] = int(RAM_ADR_VAL[final_RML])
+
+    elif opcode == 'branchIF':
+        rmlCache.remove('|')
+        final_RML = int(''.join(rmlCache))
+
+        integerCache_DCS.remove('^')
+        final_INT_DCS = int(''.join(integerCache_DCS))
+
+        if dataType == 'int':
+            integerCache.remove('^')
+        final_INT = int(''.join(integerCache))
+        if RAM_ADR_VAL[final_RML] == final_INT:
+            instructionProcessing_i = final_INT_DCS - 1
+
+        elif dataType == 'str':
+            stringCache.remove('$')
+        final_STR = ''.join(stringCache)
+        if RAM_ADR_VAL[final_RML] == final_STR:
+            instructionProcessing_i = final_INT_DCS - 1
+
+        elif dataTypeList.count('rml') == 2:
+            rmlCache_DCS.remove('|')
+        final_RML_DCS = ''.join(rmlCache_DCS)
+        if RAM_ADR_VAL[final_RML] == final_RML_DCS:
+            instructionProcessing_i = final_INT_DCS - 1
+
+            # Parser
 def parse(instruction):
     global opcode, parserCache, parserCache_STRING, instructionProcessing_i, parser_i, startFlag, endFlag, dataType, currentLetter, parserCache_DATA_INT, parserCache_DATA_STR
     global integerCache, integerCache_DCS
@@ -306,6 +378,10 @@ def instructionProcessing(instructions):
         endFlag = False
         parse(instructions[instructionProcessing_i])
         instructionProcessing_i += 1
+    print('')
+    print('---Code Execution Successful---')
+    sleep(1)
+    input('To run more code, restart the app. Enter any key to allow this: ')
 
 def CortadoSHARP(code):
     instructionProcessing(code)
@@ -318,5 +394,4 @@ while code != '~run':
     program.append(code)
 
 program.remove('~run')
-
 CortadoSHARP(program)
