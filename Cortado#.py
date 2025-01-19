@@ -1,6 +1,6 @@
 from time import sleep
 
-print('Cortado# --- 1.0 RELEASE')
+print('Cortado# --- 1.1 RELEASE')
 print('Copyright (c) 2024-2025 Eyad Taha')
 print('')
 
