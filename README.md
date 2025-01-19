@@ -1,6 +1,15 @@
-It's been done: The Final 1.0 Release. This project was immensely hard, but it has been finished: Cortado#.
+This is a seperate branch from the main
 
-All major updates from now on will be seperated into another branch. After 3 branches have been created, it will merge into the main branch.
-
-
-This project is a revision of Prism Interpreter called Cortado#. Cortado# follows in the direction of a programming language, but certainly not as advanced as one, so this is still under the category of a very, very simple interpreter. ;)
+Changelog:
+  Fixes:
+    Fixed copyright info.
+    
+  Renaming:
+    Renamed ".RAM" to ".RML"
+    Renamed "branch.if_lastOperZero" to "branch.if_ac.ZERO"
+    
+  Additions:
+    Added the function "branch.if_ac".
+    Added the function "newline"
+    Added the function "branch.eq.if"
+    Added the function "convert.Int"
