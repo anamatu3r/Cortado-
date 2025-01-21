@@ -1,6 +1,6 @@
 from time import sleep
 
-print('Cortado# --- 1.0 RELEASE')
+print('Cortado# --- 1.2 RELEASE')
 print('Copyright (c) 2024-2025 Eyad Taha')
 print('')
 
@@ -32,7 +32,7 @@ str_i = 0
 
 # Lexer
 class lexer:
-    # Functions
+    
     @staticmethod
     def functions(self):
         global opcode, parserCache, parserCache_STRING, instructionProcessing_i, parser_i, startFlag, endFlag, dataType
@@ -402,6 +402,25 @@ program = []
 while code != '~run':
     code = input('>> ')
     program.append(code)
+    if code == '~load calculator':
+        program.remove('~load calculator')
+        program = [
+            "request|0|$Enter digit 1: $",
+            "request|1|$Enter digit 2: $",
+            "request|2|$Enter operation: $",
+            "branch.eq.if|2|$+$^8^",
+            "convert.Int|0|",
+            "convert.Int|1|",
+            ".ALU.sub|0||1|",
+            "branch^11^",
+            "convert.Int|0|",
+            "convert.Int|1|",
+            ".ALU.add|0||1|",
+            "flash|65|",
+        ]
+    elif code == '~load helloWorld':
+        program.remove('~load helloWorld')
+        program = ['flash$Hello World!$']
 
 program.remove('~run')
 CortadoSHARP(program)
